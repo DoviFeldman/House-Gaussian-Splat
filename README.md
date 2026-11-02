@@ -4,7 +4,7 @@ A 3D Gaussian splat of a house, made from drone footage. Fly around it in your b
 
 **https://dovifeldman.github.io/House-Gaussian-Splat/**
 
-Drag to orbit, right-drag or two fingers to pan, scroll or pinch to zoom. It downloads a 50 MB scene, so give it a few seconds.
+Drag to orbit, right-drag or two fingers to pan, scroll or pinch to zoom. It downloads a 50 MB scene and shows its progress, which can take a couple of minutes on a slower connection.
 
 ![The house](preview.jpg)
 
@@ -26,6 +26,7 @@ Built with the pipeline in [GAUSSIAN_SPLATTING](https://github.com/DoviFeldman/G
 | Brush's default 1920 px limit would have downscaled the 2566 px undistorted frames | Trained with `--max-resolution 2566` |
 | The fly-around was tilted because a sloped roof was picked as "up" | Took "up" from the average drone horizon and only allowed planes within 12° of it |
 | The viewer opened with the camera inside the roof, because the library skips the start position for an external camera | Set the camera position before creating the viewer |
+| The page looked frozen during the 50 MB download, about 2 minutes on a slow connection | Added a live download counter |
 | Video rendering hung at 0% CPU with no error | `record_video.sh` needs an absolute path to the splat |
 
 ## Known limits

@@ -15,7 +15,7 @@
 </script>
 </head>
 <body>
-<div id="hud">Loading the 3D scene… (50 MB, a few seconds)</div>
+<div id="hud">Loading the 3D scene… (50 MB, can take a couple of minutes)</div>
 <script type="module">
 // Local Gaussian splat viewer + camera-path recorder.
 //   index.html                               shows the house
@@ -57,7 +57,14 @@ const viewer = new GS.Viewer({
 // (GitHub Pages does), because Content-Length no longer matches the real size.
 const ext = sceneUrl.split('?')[0].split('.').pop().toLowerCase();
 const formats = { splat: GS.SceneFormat.Splat, ksplat: GS.SceneFormat.KSplat, ply: GS.SceneFormat.Ply };
-const sceneBlob = await (await fetch(sceneUrl)).blob();
+const reader = (await fetch(sceneUrl)).body.getReader();
+const chunks = [];
+for (let got = 0, r; !(r = await reader.read()).done;) {
+  chunks.push(r.value);
+  got += r.value.length;
+  hud.textContent = `Loading the 3D scene… ${Math.round(got / 1e6)} of 50 MB`;
+}
+const sceneBlob = new Blob(chunks);
 await viewer.addSplatScene(URL.createObjectURL(sceneBlob), { format: formats[ext], progressiveLoad: false, showLoadingUI: false });
 if (!record) viewer.start();
 const tick = () => new Promise(r => setTimeout(r, 15));
